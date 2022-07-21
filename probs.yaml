@@ -1,0 +1,185 @@
+classes:
+- тело-одежда:
+  - name: Футболка-1
+    prob: 9
+  - name: Футболка-2
+    prob: 8
+  - name: Футболка-Strike
+    prob: 8
+  - name: Футболка-ABU
+    prob: 8
+  - name: Футболка-5
+    prob: 8
+  - name: Майка
+    prob: 7
+  - name: Майка-ВДВ
+    prob: 7
+  - name: Худи-DUSKY
+    prob: 7
+  - name: Худи
+    prob: 7
+  - name: Пиджак-BLACK
+    prob: 5
+  - name: Олимпийка-Sunrise
+    prob: 5
+  - name: Олимпийка-Hotline
+    prob: 5
+  - name: Олимпийка
+    prob: 4
+  - name: Без элемента
+    prob: 4
+  - name: Патронтаж
+    prob: 4
+  - name: Бронежилет
+    prob: 2
+  - name: Рубашка-Маями
+    prob: 2
+- жесты:
+  - name: Кисть-для-предмета
+    prob: 55
+  - name: Жест-Джамбо
+    prob: 10
+  - name: Жест-FCKU
+    prob: 15
+  - name: Жест-SALAM
+    prob: 10
+  - name: Жест-указательный-палец
+    prob: 10
+- предметы-в-руке:
+  - name: УЗИ
+    prob: 2
+  - name: Динамит
+    prob: 2
+  - name: Чупачупс
+    prob: 5
+  - name: Часть-сигары-после-руки
+    prob: 5
+  - name: Кегля
+    prob: 5
+  - name: БИТА
+    prob: 8
+  - name: Сигарета-рука
+    prob: 8
+  - name: Баллончик-краски
+    prob: 10
+  - name: Стакан
+    prob: 10
+- акссесуар-для-джамбо:
+  - name: Кольцо-Джамбо
+    prob: 20
+  - name: Nothing
+    prob: 80
+- акссесуар-для-FCKU:
+  - name: Перстень-FCKU
+    prob: 5
+  - name: Nothing
+    prob: 10
+- акссесуар-для-предмета:
+  - name: Перстень-КИСТЬ-ДЕРЖАТЕЛЬ
+    prob: 2
+  - name: Nothing
+    prob: 98
+- аксессуары-голова:
+  - name: Волосы
+    prob: 5
+  - name: Слой-33
+    prob: 8
+  - name: Кепка
+    prob: 8
+  - name: Шапка
+    prob: 9
+  - name: Восьмиклинка
+    prob: 10
+  - name: Панама
+    prob: 20
+  - name: Nothing
+    prob: 40
+- аксессуары-лицо:
+  - name: Nothing
+    prob: 40
+  - name: Бандана-CJ
+    prob: 10
+  - name: Бандана
+    prob: 8
+  - name: Сигарета
+    prob: 8
+  - name: Зубочистка
+    prob: 8
+  - name: Очки-Sunrise
+    prob: 7
+  - name: Очки-1
+    prob: 7
+  - name: Очки-3
+    prob: 4
+  - name: Патрон
+    prob: 4
+  - name: Очки-DEPO
+    prob: 2
+  - name: Очки-2
+    prob: 2
+- аксессуары-запястья:
+  - name: Часы-1
+    prob: 2
+  - name: Часы-2
+    prob: 3
+  - name: Часы-3
+    prob: 5
+  - name: Тату-колючка
+    prob: 10
+  - name: Nothing
+    prob: 80
+- аксессуары-тела:
+  - name: Золотая-цепь
+    prob: 5
+  - name: Цепи
+    prob: 10
+  - name: Nothing
+    prob: 85
+- татуировки:
+  - name: Без тату
+    prob: 70
+  - name: Тату-Сердце
+    prob: 15
+  - name: Тату-крокодил
+    prob: 10
+  - name: Тату-змея
+    prob: 3
+  - name: C4
+    prob: 2
+- задний-фон:
+  - name: Задний-план
+    prob: 35
+  - name: Задний-план-2
+    prob: 25
+  - name: Фон-Пальмы-3/Задний-план-2
+    prob: 9
+  - name: Фон-Пальмы/Задний-план
+    prob: 8
+  - name: ФОН-ПАЛЬМЫ-2/Задний-план-2
+    prob: 8
+  - name: Пальмы триколор/Задний-план
+    prob: 5
+  - name: Пальмы триколор/Задний-план-2
+    prob: 5
+  - name: Задний-план-Ягуар
+    prob: 3
+  - name: Задний-фон-ТАЙГА
+    prob: 2
+- передний-план:
+  - name: Передний-план-4
+    prob: 10
+  - name: Передний-план-2
+    prob: 20
+  - name: Передний-план-3
+    prob: 30
+  - name: Передний-план
+    prob: 40
+- constraints:
+  - object: Кисть-для-предмета
+    class: предметы-в-руке
+  - object: Кисть-для-предмета
+    class: акссесуар-для-предмета
+  - object: Жест-Джамбо
+    class: акссесуар-для-джамбо
+  - object: Жест-FCKU
+    class: акссесуар-для-FCKU
