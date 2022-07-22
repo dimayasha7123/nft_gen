@@ -14,7 +14,7 @@ classes:
     prob: 5
   - name: Пальмы триколор/Задний-план-2
     prob: 5
-  - name: Задний-план-Ягуар
+  - name: Задний-фон-Ягуар
     prob: 3
   - name: Задний-фон-ТАЙГА
     prob: 2
@@ -23,7 +23,7 @@ classes:
     prob: 10
   - name: Передний-план-2
     prob: 20
-  - name: Передний-план-3
+  - name: Передний-План-3
     prob: 30
   - name: Передний-план
     prob: 40
@@ -31,7 +31,7 @@ classes:
   - name: Тело
     prob: 1
 - голова:
-  - name: Пришелец
+  - name: пришелец
     prob: 1
 - глаза:
   - name: ГЛАЗА-1
@@ -40,7 +40,7 @@ classes:
   - name: губы-1
     prob: 1
 - татуировки:
-  - name: Без тату
+  - name: Nothing
     prob: 70
   - name: Тату-Сердце
     prob: 15
@@ -77,7 +77,7 @@ classes:
     prob: 5
   - name: Олимпийка
     prob: 4
-  - name: Без элемента
+  - name: Nothing
     prob: 4
   - name: Патронтаж
     prob: 4
@@ -108,7 +108,7 @@ classes:
     prob: 2
   - name: Динамит
     prob: 2
-  - name: Чупачупс
+  - name: CHUPS
     prob: 5
   - name: Часть-сигары-после-руки
     prob: 5
@@ -116,7 +116,7 @@ classes:
     prob: 5
   - name: БИТА
     prob: 8
-  - name: Сигарета-рука
+  - name: Cигарета-рука
     prob: 8
   - name: Баллончик-краски
     prob: 10
