@@ -73,21 +73,22 @@ if __name__ == "__main__":
     print(f'Удалено {len(filesToDelete)} файлов')
 
     generated = list()
-
     constrObjectList = list(map(lambda x: x['object'], probs['constraints']))
     constrClassList = list(map(lambda x: x['class'], probs['constraints']))
-    print(constrObjectList)
-    print(constrClassList)
+
 
     # сама генерация тонны картиночек
     countOfDoubles = 0
+    countOfNotFound = 0
     t = 0
-    while t < 1:
+    while t < 100:
         newImageLayers = list()
         for i in probs['classes']:
             for j in i:
-                #if j in constrClassList:
-                    
+                if j in constrClassList and not constrObjectList[constrClassList.index(j)] in newImageLayers:
+                    # осторожно
+                    print(f'Ооо, я нашел ограничение для класса {j}')
+                    continue
                 gen_prob = randint(1, sumProbsMap[j])
                 sum = 0
                 for k in i[j]:
@@ -108,6 +109,7 @@ if __name__ == "__main__":
                 newImageLayersWithPrior.append((i, dict(order)[i]))
             else:
                 print(f'Приоритет для {i} не найден!')
+                countOfNotFound+=1
 
         newImageLayersWithPrior.sort(key=lambda i: i[1])
         newImageLayersWithPrior.reverse()
@@ -136,9 +138,12 @@ if __name__ == "__main__":
         output.save(output_path + str(t) + '.png')
         print(f'Сохранил картинку №{t}')
         t += 1
-    
-    print('Дубликатов: ', countOfDoubles)
 
+    print('Дубликатов:', countOfDoubles)
+    print('Не найдено слоев (всего):', countOfNotFound)
+
+
+    # вывод файла отчета по картинкам
     # по хорошему это вынести в отдельный конфиг
     restrictions = ['Тело', 'пришелец', 'ГЛАЗА-1', 'губы-1']
 
@@ -159,9 +164,3 @@ if __name__ == "__main__":
 
     end = time.time()
     print("The time of execution of above program is:", end-start)
-
-    # надо бахнуть две фичи
-    #   1. - Генерация с учетом ограничений
-    #       1.1 + Выбить до конца ограничения с Севы
-    #       1.2 - Бахнуть саму фичу
-    #   2. + Вывод файла с описанием всех картинок, добиться генерации разных картинок
