@@ -66,7 +66,6 @@ if __name__ == "__main__":
             # print(j, len(i[j]), sumProb)
 
     # удаляем все из output
-
     filesToDelete = [f for f in os.listdir(output_path) if f.endswith(".png")]
     for f in filesToDelete:
         os.remove(os.path.join(output_path, f))
@@ -75,12 +74,20 @@ if __name__ == "__main__":
 
     generated = list()
 
+    constrObjectList = list(map(lambda x: x['object'], probs['constraints']))
+    constrClassList = list(map(lambda x: x['class'], probs['constraints']))
+    print(constrObjectList)
+    print(constrClassList)
+
     # сама генерация тонны картиночек
+    countOfDoubles = 0
     t = 0
-    while t < 10:
+    while t < 1:
         newImageLayers = list()
         for i in probs['classes']:
             for j in i:
+                #if j in constrClassList:
+                    
                 gen_prob = randint(1, sumProbsMap[j])
                 sum = 0
                 for k in i[j]:
@@ -111,6 +118,7 @@ if __name__ == "__main__":
 
         if newImageLayersSorted in generated:
             print('Ооо нет, у нас уже есть такая картинка... Лааадно, сделаем новую')
+            countOfDoubles += 1
             continue
         else:
             generated.append(newImageLayersSorted)
@@ -128,7 +136,10 @@ if __name__ == "__main__":
         output.save(output_path + str(t) + '.png')
         print(f'Сохранил картинку №{t}')
         t += 1
+    
+    print('Дубликатов: ', countOfDoubles)
 
+    # по хорошему это вынести в отдельный конфиг
     restrictions = ['Тело', 'пришелец', 'ГЛАЗА-1', 'губы-1']
 
     with open('report.txt', 'w') as report:
@@ -153,14 +164,4 @@ if __name__ == "__main__":
     #   1. - Генерация с учетом ограничений
     #       1.1 + Выбить до конца ограничения с Севы
     #       1.2 - Бахнуть саму фичу
-    #   2. - Вывод файла с описанием всех картинок, добиться генерации разных картинок
-    #
-
-    # l1 = Image.open("./export3/Баллончик-краски.png")
-    # l2 = Image.open("./export3/Кисть-для-предмета.png")
-
-    # output = Image.new("RGBA", l1.size)
-    # output = Image.alpha_composite(output, l1)
-    # output = Image.alpha_composite(output, l2)
-
-    # output.save("./output/test1.png")
+    #   2. + Вывод файла с описанием всех картинок, добиться генерации разных картинок
