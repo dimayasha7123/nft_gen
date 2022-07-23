@@ -5,9 +5,6 @@ from random import randint
 import time
 
 
-def Diff(li1, li2):
-    return list(set(li1) - set(li2)) + list(set(li2) - set(li1))
-
 def CheckAll(probsConfig, order, files):
     clss = list()
     for i in probsConfig['classes']:
@@ -18,19 +15,22 @@ def CheckAll(probsConfig, order, files):
     for i in range(nothingCount):
         clss.remove('Nothing')
     files = list(map(lambda item: item[0:len(item)-4], files))
-    
+
     print('Есть в конфиге, но нет файлов:', list(set(clss) - set(files)))
     print('Есть файл, но его нет в конфиге:', list(set(files) - set(clss)))
-    
-    print('Есть в основном конфиге, но нет в конфиге слоев:', list(set(clss) - set(order)))
-    print('Есть в конфиге слоев, но нет в основном:', list(set(order) - set(clss)))
+
+    print('Есть в основном конфиге, но нет в конфиге слоев:',
+          list(set(clss) - set(order)))
+    print('Есть в конфиге слоев, но нет в основном:',
+          list(set(order) - set(clss)))
 
 
 if __name__ == "__main__":
+    start = time.time()
 
     with open('probs.yaml', 'rb') as file:
         probs = yaml.load(file, yaml.Loader)
-    
+
     with open('order.yaml', 'rb') as file:
         orderMap = yaml.load(file, yaml.Loader)
 
@@ -42,7 +42,6 @@ if __name__ == "__main__":
 
     export_path = r'./export/'
     output_path = r'./output/'
-
 
     fileList = os.listdir(export_path)
 
@@ -65,9 +64,20 @@ if __name__ == "__main__":
                 sumProb += k['prob']
             sumProbsMap[j] = sumProb
             # print(j, len(i[j]), sumProb)
-    
-    # идем по классам
-    for t in range(10):
+
+    # удаляем все из output
+
+    filesToDelete = [f for f in os.listdir(output_path) if f.endswith(".png")]
+    for f in filesToDelete:
+        os.remove(os.path.join(output_path, f))
+
+    print(f'Удалено {len(filesToDelete)} файлов')
+
+    generated = list()
+
+    # сама генерация тонны картиночек
+    t = 0
+    while t < 10:
         newImageLayers = list()
         for i in probs['classes']:
             for j in i:
@@ -78,34 +88,73 @@ if __name__ == "__main__":
                     if sum >= gen_prob:
                         newImageLayers.append(k['name'])
                         break
-        
+
         nothingCount = newImageLayers.count('Nothing')
         for i in range(nothingCount):
             newImageLayers.remove('Nothing')
-        
+
         newImageLayersWithPrior = list()
-        
+
+        # добавляем приоритет по слоям и сортим
         for i in newImageLayers:
             if i in orderWithoutProbs:
                 newImageLayersWithPrior.append((i, dict(order)[i]))
+            else:
+                print(f'Приоритет для {i} не найден!')
 
-        newImageLayersWithPrior.sort(key = lambda i: i[1])
+        newImageLayersWithPrior.sort(key=lambda i: i[1])
         newImageLayersWithPrior.reverse()
 
-        sizeIm = Image.open(export_path + fileList[0])
-
-        output = Image.new("RGBA", sizeIm.size)
+        newImageLayersSorted = list()
         for l in newImageLayersWithPrior:
-            lname = l[0]
+            newImageLayersSorted.append(l[0])
+
+        if newImageLayersSorted in generated:
+            print('Ооо нет, у нас уже есть такая картинка... Лааадно, сделаем новую')
+            continue
+        else:
+            generated.append(newImageLayersSorted)
+
+        output = Image.new("RGBA", Image.open(export_path + fileList[0]).size)
+        for l in newImageLayersSorted:
+            # скипаем, если не смогли найти нужную пнгху
             try:
-                image = Image.open(export_path + lname + '.png')
+                image = Image.open(export_path + l + '.png')
             except:
+                print(f'Файл {l}.png не найден!')
                 break
             output = Image.alpha_composite(output, image)
 
-        output.save(output_path + str(time.time()) + '.png')
+        output.save(output_path + str(t) + '.png')
+        print(f'Сохранил картинку №{t}')
+        t += 1
 
-    # составляем новую генерацию пройдясь по циклам, добавляем картинки в список и сортим по порядку слоев, сливаем и так далее
+    restrictions = ['Тело', 'пришелец', 'ГЛАЗА-1', 'губы-1']
+
+    with open('report.txt', 'w') as report:
+        counter = 0
+        for picData in generated:
+            s = str(counter)
+            counter += 1
+            s += ': '
+            for l in picData:
+                if l in restrictions:
+                    continue
+                s += l
+                s += ', '
+            s = s[0: len(s) - 2]
+            s += '\n'
+            report.write(s)
+
+    end = time.time()
+    print("The time of execution of above program is:", end-start)
+
+    # надо бахнуть две фичи
+    #   1. - Генерация с учетом ограничений
+    #       1.1 + Выбить до конца ограничения с Севы
+    #       1.2 - Бахнуть саму фичу
+    #   2. - Вывод файла с описанием всех картинок, добиться генерации разных картинок
+    #
 
     # l1 = Image.open("./export3/Баллончик-краски.png")
     # l2 = Image.open("./export3/Кисть-для-предмета.png")
