@@ -39,17 +39,6 @@ classes:
 - губы:
   - name: губы-1
     prob: 1
-- татуировки:
-  - name: Nothing
-    prob: 1
-  - name: Тату-Сердце
-    prob: 15
-  - name: Тату-крокодил
-    prob: 10
-  - name: Тату-змея
-    prob: 3
-  - name: C4
-    prob: 2
 - тело-одежда:
   - name: Футболка-1
     prob: 9
@@ -84,6 +73,17 @@ classes:
   - name: Бронежилет
     prob: 2
   - name: Рубашка-Маями
+    prob: 2
+- татуировки:
+  - name: Nothing
+    prob: 70
+  - name: Тату-Сердце
+    prob: 15
+  - name: Тату-крокодил
+    prob: 10
+  - name: Тату-змея
+    prob: 3
+  - name: C4
     prob: 2
 - аксессуары-тела:
   - name: Золотая-цепь

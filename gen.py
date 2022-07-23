@@ -30,6 +30,7 @@ if __name__ == "__main__":
 
     with open('probs.yaml', 'rb') as file:
         probs = yaml.load(file, yaml.Loader)
+    # порядок probs на самом деле важен для правильной работы ограничений
 
     with open('order.yaml', 'rb') as file:
         orderMap = yaml.load(file, yaml.Loader)
@@ -69,26 +70,37 @@ if __name__ == "__main__":
     filesToDelete = [f for f in os.listdir(output_path) if f.endswith(".png")]
     for f in filesToDelete:
         os.remove(os.path.join(output_path, f))
-
     print(f'Удалено {len(filesToDelete)} файлов')
 
     generated = list()
+
     constrObjectList = list(map(lambda x: x['object'], probs['constraints']))
     constrClassList = list(map(lambda x: x['class'], probs['constraints']))
-
 
     # сама генерация тонны картиночек
     countOfDoubles = 0
     countOfNotFound = 0
     t = 0
-    while t < 100:
+    while t < 2000:
         newImageLayers = list()
+
+
         for i in probs['classes']:
             for j in i:
-                if j in constrClassList and not constrObjectList[constrClassList.index(j)] in newImageLayers:
-                    # осторожно
-                    print(f'Ооо, я нашел ограничение для класса {j}')
-                    continue
+
+                # проверяем ограничение
+                if j in constrClassList:
+                    inImage = False
+                    for k in probs['constraints']:                    
+                        if k['class'] == j and k['object'] in newImageLayers:
+                            inImage = True
+                            break
+                    if not inImage:
+                        print(f'Ооо, я нашел ограничение для класса {j}')
+                        # осторожно, работает ибо в i один элемент
+                        continue
+
+                # ищем нужный слой в классе согласено вероятности
                 gen_prob = randint(1, sumProbsMap[j])
                 sum = 0
                 for k in i[j]:
@@ -97,6 +109,8 @@ if __name__ == "__main__":
                         newImageLayers.append(k['name'])
                         break
 
+
+        # избавляемся от Nothing
         nothingCount = newImageLayers.count('Nothing')
         for i in range(nothingCount):
             newImageLayers.remove('Nothing')
@@ -110,14 +124,13 @@ if __name__ == "__main__":
             else:
                 print(f'Приоритет для {i} не найден!')
                 countOfNotFound+=1
-
         newImageLayersWithPrior.sort(key=lambda i: i[1])
         newImageLayersWithPrior.reverse()
-
         newImageLayersSorted = list()
         for l in newImageLayersWithPrior:
             newImageLayersSorted.append(l[0])
 
+        # чекаем, есть ли уже точно такая же картинка
         if newImageLayersSorted in generated:
             print('Ооо нет, у нас уже есть такая картинка... Лааадно, сделаем новую')
             countOfDoubles += 1
@@ -125,16 +138,16 @@ if __name__ == "__main__":
         else:
             generated.append(newImageLayersSorted)
 
+        #сохраняем картинку
         output = Image.new("RGBA", Image.open(export_path + fileList[0]).size)
         for l in newImageLayersSorted:
-            # скипаем, если не смогли найти нужную пнгху
+            # на всякий
             try:
                 image = Image.open(export_path + l + '.png')
             except:
                 print(f'Файл {l}.png не найден!')
                 break
             output = Image.alpha_composite(output, image)
-
         output.save(output_path + str(t) + '.png')
         print(f'Сохранил картинку №{t}')
         t += 1
