@@ -1,3 +1,4 @@
 /export*
-/output
-report.txt
+/output*
+report.*
+*.7z
